@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.svg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{ current_user.username|capitalize }}!</h1>
+        <div class="auth-buttons">
+            <form action="{{ url_for('logout') }}" method="post">
+                <button class="btn btn-secondary" type="submit">Logout</button>
+            </form>
+            <a href="{{ url_for('register') }}" class="btn btn-primary">Register</a>
+        </div>
+        <h2>Your To-Do List</h2>
+        <!-- Form to add a new task -->
+        <form action="{{ url_for('add_task') }}" method="post">
+            <label for="task_name">Task Name:</label>
+            <input type="text" id="task_name" name="name" placeholder="Enter a task name" required>
+            <button class="btn btn-primary" type="submit">Add Task</button>
+        </form>
+        <ul class="task-list">
+            {% for task in tasks %}
+            <li class="task-item">
+                <div class="task-info">
+                    <h3>{{ task.name }}</h3>
+                    <p>Date: {{ task.date.strftime('%Y-%m-%d') }}</p>
+                    <p>Status: {% if task.completed %}
+                        <span class="task-completed">Completed</span>
+                        {% else %}
+                        <span class="task-pending">Pending</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="task-actions">
+                    {% if not task.completed %}
+                    <form action="{{ url_for('complete_task', task_id=task.id) }}" method="post">
+                        <button class="btn btn-success" type="submit">Mark as Complete</button>
+                    </form>
+                    {% endif %}
+                    <a class="btn btn-info" href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
+                    <a class="btn btn-danger" href="{{ url_for('delete_task', task_id=task.id) }}">Delete</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
