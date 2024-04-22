@@ -64,9 +64,6 @@ todo-app/
 + Flask-Login
 
 
-## License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ```vbnet
-You can customize this README.md file further based on your project's specific details and requirements.
+
 ```
